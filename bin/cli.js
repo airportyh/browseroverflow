@@ -1,24 +1,24 @@
 #! /usr/bin/env node
 
-var download = require('../lib/download')
-var ProgressBar = require('progress')
+var cmd = require('commander')
 
-download({
-  url: 'http://saucelabs.com/downloads/Sauce-Connect-latest.zip',
-  file: 'downloads/sauce.zip',
-  progressBar: makeBar,
-}, function(){
-  console.log()
-  process.exit()
-})
+cmd.version(require(__dirname + '/../package').version)
 
-function makeBar(len){
-  return new ProgressBar(
-    'Downloading Sauce-Connect-latest.zip [:bar] :percent', {
-      complete: '=',
-      incomplete: ' ',
-      width: 20,
-      total: len
-    }
-  )
+browserStack()
+function browserStack(){
+  cmd.command('browserstack')
+  .description('Setup BrowserStack config')
+  
+}
+
+sauceLabs()
+function sauceLabs(){
+  cmd.command('saucelabs <cmd>')
+}
+
+
+cmd.parse(process.argv)
+
+if (cmd.args.length === 0){
+  cmd.outputHelp()
 }

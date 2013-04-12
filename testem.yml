@@ -1,8 +1,14 @@
 launchers:
   mocha:
-    command: mocha -u tdd -R tap test/*.js
+    command: mocha -u tdd -R tap --grep @slow --invert test/*.js
+    protocol: tap
+  cli: 
+    command: bin/cli.js
+  bs:
+    command: mocha -u tdd -R tap test/browserstack_tests.js
     protocol: tap
 src_files:
+- bin/*.js
 - test/*.js
 - lib/*.js
 launch_in_dev:
