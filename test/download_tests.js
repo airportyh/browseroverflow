@@ -46,7 +46,7 @@ suite('download', function(){
     })    
   })
 
-  teardown(function(done){
+  setup(function(done){
     exec('rm downloads/*', function(){ done() })
   })
 

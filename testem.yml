@@ -2,5 +2,8 @@ launchers:
   mocha:
     command: mocha -u tdd -R tap test/*.js
     protocol: tap
+src_files:
+- test/*.js
+- lib/*.js
 launch_in_dev:
 - mocha

@@ -1,0 +1,26 @@
+{
+  "name": "browsem",
+  "version": "0.0.0",
+  "description": "Browser launcher in the cloud.",
+  "main": "index.js",
+  "bin": {
+    "browsem": "download.js"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "progress": "~0.1.0",
+    "unzip": "~0.1.7"
+  },
+  "devDependencies": {
+    "sinon": "~1.6.0"
+  },
+  "scripts": {
+    "test": "mocha -u tdd test/*.js"
+  },
+  "repository": "",
+  "author": "Toby Ho",
+  "license": "MIT",
+  "gitHead": "0cc0120e16cc7685a9ebe38c3d1d4c1021c25d87"
+}
