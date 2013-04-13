@@ -1,7 +1,11 @@
 var assert = require('chai').assert
+
 var browserstack = require('../lib/browserstack')
 var credentials = require(__dirname + '/browserstack.credentials.json')
-    
+var extend = require('../lib/extend')
+var sinon = require('sinon')
+
+
 suite('browserstack', function(){
 
   var bs
@@ -66,15 +70,74 @@ suite('browserstack', function(){
     })
   })
 
-  /*test('tunnel', function(done){
-    bs = browserstack(extend(credentials, {jarpath: })
+  test('tunnel success', function(done){
+    function FakeProc(cmd, config){
+      assert.deepEqual(config.successWhenMatches, /You can now access your local server/)
+      assert.equal(cmd, 
+        'java -jar jars/browserstack.jar ' + credentials.key + ' localhost,7357,0')
+      return {
+        cmd: cmd,
+        config: config,
+        start: function(){
+          config.success()
+        }
+      }
+    }
+
+    bs = browserstack(extend(credentials, {
+      jarpath: 'jars/browserstack.jar',
+      SimpleProcess: FakeProc
+    }))
+
     bs.tunnel('localhost', 7357, function(err){
+      assert.isNull(err)
       done()
     })
-  })*/
+  })
+
+  test('tunnel fatal error', function(done){
+    function FakeProc(cmd, config){
+      return {
+        start: function(){
+          config.fail('jar not found')
+        }
+      }
+    }
+
+    bs = browserstack(extend(credentials, {
+      jarpath: 'jars/browserstack.jar',
+      SimpleProcess: FakeProc
+    }))
+
+    bs.tunnel('localhost', 7357, function(err){
+      assert.equal(err, 'Tunneling failed because: jar not found')
+      done()
+    })
+  })
+
+  test('tunnel subtle error', function(done){
+    function FakeProc(cmd, config){
+      return {
+        start: function(){
+          config.stdout('blah blah\n**Error: blah blah blah\nblah blah\n')
+        }
+      }
+    }
+
+    bs = browserstack(extend(credentials, {
+      jarpath: 'jars/browserstack.jar',
+      SimpleProcess: FakeProc
+    }))
+
+    bs.tunnel('localhost', 7357, function(err){
+      assert.equal(err, 'Tunneling failed because: blah blah blah')
+      done()
+    })
+  })
 
   teardown(function(done){
     bs.killAllJobs(function(){ done() })
   })
 
 })
+
