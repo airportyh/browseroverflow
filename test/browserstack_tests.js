@@ -66,11 +66,12 @@ suite('browserstack', function(){
     })
   })
 
-  test('tunnel', function(done){
+  /*test('tunnel', function(done){
+    bs = browserstack(extend(credentials, {jarpath: })
     bs.tunnel('localhost', 7357, function(err){
       done()
     })
-  })
+  })*/
 
   teardown(function(done){
     bs.killAllJobs(function(){ done() })
