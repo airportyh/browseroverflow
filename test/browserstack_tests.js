@@ -70,69 +70,73 @@ suite('browserstack', function(){
     })
   })
 
-  test('tunnel success', function(done){
-    function FakeProc(cmd, config){
-      assert.deepEqual(config.successWhenMatches, /You can now access your local server/)
-      assert.equal(cmd, 
-        'java -jar jars/browserstack.jar ' + credentials.key + ' localhost,7357,0')
-      return {
-        cmd: cmd,
-        config: config,
-        start: function(){
-          config.success()
+  suite('tunneling', function(){
+
+    test('tunnel success', function(done){
+      function FakeProc(cmd, config){
+        assert.deepEqual(config.successWhenMatches, /You can now access your local server/)
+        assert.equal(cmd, 
+          'java -jar jars/browserstack.jar ' + credentials.key + ' localhost,7357,0')
+        return {
+          cmd: cmd,
+          config: config,
+          start: function(){
+            config.success()
+          }
         }
       }
-    }
 
-    bs = browserstack(extend(credentials, {
-      jarpath: 'jars/browserstack.jar',
-      SimpleProcess: FakeProc
-    }))
+      bs = browserstack(extend(credentials, {
+        jarpath: 'jars/browserstack.jar',
+        SimpleProcess: FakeProc
+      }))
 
-    bs.tunnel('localhost', 7357, function(err){
-      assert.isNull(err)
-      done()
+      bs.tunnel('localhost', 7357, function(err){
+        assert.isNull(err)
+        done()
+      })
     })
-  })
 
-  test('tunnel fatal error', function(done){
-    function FakeProc(cmd, config){
-      return {
-        start: function(){
-          config.fail('jar not found')
+    test('tunnel fatal error', function(done){
+      function FakeProc(cmd, config){
+        return {
+          start: function(){
+            config.fail('jar not found')
+          }
         }
       }
-    }
 
-    bs = browserstack(extend(credentials, {
-      jarpath: 'jars/browserstack.jar',
-      SimpleProcess: FakeProc
-    }))
+      bs = browserstack(extend(credentials, {
+        jarpath: 'jars/browserstack.jar',
+        SimpleProcess: FakeProc
+      }))
 
-    bs.tunnel('localhost', 7357, function(err){
-      assert.equal(err, 'Tunneling failed because: jar not found')
-      done()
+      bs.tunnel('localhost', 7357, function(err){
+        assert.equal(err, 'jar not found')
+        done()
+      })
     })
-  })
 
-  test('tunnel subtle error', function(done){
-    function FakeProc(cmd, config){
-      return {
-        start: function(){
-          config.stdout('blah blah\n**Error: blah blah blah\nblah blah\n')
+    test('tunnel subtle error', function(done){
+      function FakeProc(cmd, config){
+        return {
+          start: function(){
+            config.stdout('blah blah\n**Error: blah blah blah\nblah blah\n')
+          }
         }
       }
-    }
 
-    bs = browserstack(extend(credentials, {
-      jarpath: 'jars/browserstack.jar',
-      SimpleProcess: FakeProc
-    }))
+      bs = browserstack(extend(credentials, {
+        jarpath: 'jars/browserstack.jar',
+        SimpleProcess: FakeProc
+      }))
 
-    bs.tunnel('localhost', 7357, function(err){
-      assert.equal(err, 'Tunneling failed because: blah blah blah')
-      done()
+      bs.tunnel('localhost', 7357, function(err){
+        assert.equal(err, 'blah blah blah')
+        done()
+      })
     })
+
   })
 
   teardown(function(done){
