@@ -6,8 +6,25 @@ cmd.version(require(__dirname + '/../package').version)
 
 browserStack()
 function browserStack(){
-  cmd.command('browserstack')
+  var bs = cmd.command('browserstack')
   .description('Setup BrowserStack config')
+  .action(function(){
+    console.log('BrowserStack')
+  })
+
+  bs
+    .command('list')
+    .description('List active browsers')
+    .action(function(){
+      console.log('Listing active browsers for BrowserStack.')
+    })
+
+  bs
+    .command('browsers')
+    .description('List available browsers')
+    .action(function(){
+      console.log('Listing available browsers for BrowserStack.')
+    })
   
 }
 
