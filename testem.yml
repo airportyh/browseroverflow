@@ -1,6 +1,6 @@
 launchers:
   mocha:
-    command: mocha -u tdd -R tap --grep @slow --invert test/*.js
+    command: mocha -u tdd -R tap test/*.js
     protocol: tap
   cli: 
     command: bin/cli.js

@@ -1,4 +1,4 @@
-var getBrowserStackJar = require('../lib/get_browserstack_jar')
+var getBrowserStackJar = require('../../lib/get_browserstack_jar')
 var fs = require('fs')
 var exec = require('child_process').exec
 

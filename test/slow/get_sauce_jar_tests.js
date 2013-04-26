@@ -1,4 +1,4 @@
-var getSauceJar = require('../lib/get_sauce_jar')
+var getSauceJar = require('../../lib/get_sauce_jar')
 var fs = require('fs')
 var exec = require('child_process').exec
 

@@ -14,14 +14,16 @@
     "unzip": "~0.1.7",
     "commander": "~1.1.1",
     "browserstack": "~0.2.0",
-    "async": "~0.2.7"
+    "async": "~0.2.7",
+    "did_it_work": "0.0.1"
   },
   "devDependencies": {
     "sinon": "~1.6.0",
     "chai": "~1.5.0"
   },
   "scripts": {
-    "test": "mocha -u tdd test/*.js"
+    "test": "mocha -u tdd test/*.js",
+    "slowtests": "mocha -u tdd test/slow/"
   },
   "repository": "",
   "author": "Toby Ho",
