@@ -1,6 +1,6 @@
 {
   "name": "browsem",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Browser launcher in the cloud.",
   "main": "index.js",
   "bin": {
