@@ -73,9 +73,10 @@ suite('browserstack', function(){
   suite('tunneling', function(){
 
     var proc
-    function FakeProc(cmd){
+    function FakeProc(exe, args){
       proc = {}
-      proc.command = cmd
+      proc.exe = exe
+      proc.args = args
       proc.opts = {}
       var methods = 'good bad complete goodIfMatches badIfMatches'.split(' ')
       methods.forEach(function(method){
@@ -96,7 +97,10 @@ suite('browserstack', function(){
 
       bs.tunnel('localhost', 7357, function(err){
         assert.isNull(err)
-        assert.equal(proc.command, 'java -jar jars/browserstack.jar 9ywjxxgvS8JVyIv4vwQY localhost,7357,0')
+        assert.equal(proc.exe, 'java')
+        assert.deepEqual(proc.args, 
+          ['-jar', 'jars/browserstack.jar',
+          '9ywjxxgvS8JVyIv4vwQY', 'localhost,7357,0'])
         assert.deepEqual(proc.opts.goodIfMatches[0], /You can now access your local server/)
         assert.deepEqual(proc.opts.badIfMatches[0], /^\*\*Error: (.*)$/)
         done()
