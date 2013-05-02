@@ -1,0 +1,5 @@
+TODO
+====
+
+- Add tunneling option for private key vs api key
+- move calculateLaunchConfig logic out of cli.js and improve
