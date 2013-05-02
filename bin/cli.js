@@ -1,9 +1,7 @@
 #! /usr/bin/env node
 
 var program = require('commander')
-var Setup = require('../lib/setup')
 var BrowserStack = require('../lib/browserstack')
-var path = require('path')
 
 program.version(require(__dirname + '/../package').version)
 
