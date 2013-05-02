@@ -1,6 +1,6 @@
 launchers:
   mocha:
-    command: mocha -u tdd -R tap test/*.js
+    command: mocha -u tdd -R tap test/*.js -t 3000
     protocol: tap
   cli: 
     command: bin/cli.js
