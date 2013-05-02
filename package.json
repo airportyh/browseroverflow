@@ -15,7 +15,7 @@
     "commander": "~1.1.1",
     "browserstack": "~0.2.0",
     "async": "~0.2.7",
-    "did_it_work": "0.0.1"
+    "did_it_work": "~0.0.3"
   },
   "devDependencies": {
     "sinon": "~1.6.0",
