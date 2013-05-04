@@ -2,4 +2,10 @@ TODO
 ====
 
 - Add tunneling option for private key vs api key
+- add options for specifying on the commandline: username, password, tunneling key
+- launch --attach option
+- --timeout option
 - move calculateLaunchConfig logic out of cli.js and improve
+- available browsers caching
+- better error messages for tunneling
+- pretty up the display of available browsers and existing jobs

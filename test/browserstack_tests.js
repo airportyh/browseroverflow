@@ -131,7 +131,7 @@ suite('browserstack', function(){
 
       bs.Process = FakeProc
 
-      bs.tunnel('localhost', 7357, function(err){
+      bs.tunnel('localhost:7357', function(err){
         assert.isNull(err)
         assert.equal(proc.exe, 'java')
         assert.deepEqual(proc.args, 
@@ -155,7 +155,7 @@ suite('browserstack', function(){
 
       bs.Process = FakeProc
 
-      bs.tunnel('localhost', 7357, function(err){
+      bs.tunnel('localhost:7357', function(err){
         assert.equal(err, 'jar not found')
         done()
       })
@@ -163,6 +163,47 @@ suite('browserstack', function(){
       setTimeout(function(){
         proc.opts.bad[0]('jar not found')
       }, 20)
+    })
+
+    test('tunnel can optionally specify key', function(done){
+      var bs = browserstack({
+        profileDir: profileDir
+      })
+
+      bs.Process = FakeProc
+
+      bs.tunnel({
+        hostAndPort: 'localhost:7357', 
+        key: 'mykey'
+      }, function(err){
+        assert.equal(proc.args[2], 'mykey')
+        done()
+      })
+
+      setTimeout(function(){
+        proc.opts.good[0]()
+      }, 20)
+    })
+
+    test('uses private key if specifiy private', function(done){
+            var bs = browserstack({
+        profileDir: profileDir
+      })
+
+      bs.Process = FakeProc
+
+      bs.tunnel({
+        hostAndPort: 'localhost:7357', 
+        usePrivateKey: true
+      }, function(err){
+        assert.equal(proc.args[2], '38etonOu04Abet')
+        done()
+      })
+
+      setTimeout(function(){
+        proc.opts.good[0]()
+      }, 20)
+
     })
 
   })
