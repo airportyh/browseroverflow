@@ -3,7 +3,6 @@ TODO
 
 - support mobile browsers
 - browsers command allow filtering by string
-- launch --attach option
 - move calculateLaunchConfig logic out of cli.js
 - smart browser matching (latest)
 - available browsers caching

@@ -3,6 +3,9 @@
 var program = require('commander')
 var BrowserStack = require('../lib/browserstack')
 var extend = require('../lib/extend')
+var cli_util = require('../lib/cli_util')
+var exitIfErrorElse = cli_util.exitIfErrorElse
+var hangOnTillExit = cli_util.hangOnTillExit
 
 program.version(require(__dirname + '/../package').version)
 
@@ -28,8 +31,15 @@ program
   .action(function(browser, url){
     var config = calculateLaunchConfig(browser, url)
     config.timeout = program.timeout
-    createClient().launch(config, exitIfErrorElse(function(worker){
-      console.log('Launched worker ' + worker.id + '.')
+    var client = createClient()
+    client.launch(config, exitIfErrorElse(function(job){
+      console.log('Launched job ' + job.id + '.')
+      if (program.attach){
+        console.log('Ctrl-C to kill job.')
+        hangOnTillExit(function(){
+          killJob(job.id)
+        })
+      }
     }))
   })
 
@@ -58,12 +68,7 @@ program
 program
   .command('kill <job_id>')
   .description('Kill an active job')
-  .action(function(jobId){
-    createClient().kill(jobId, exitIfErrorElse(function(info){
-      console.log('Killed worker ' + jobId + ' which ran for ~' + 
-        Math.round(info.time) + 's.')
-    }))
-  })
+  .action(killJob)
 
 program
   .command('killall')
@@ -94,6 +99,10 @@ if (program.args.length === 0){
   program.outputHelp()
 }
 
+function createClient(){
+  return BrowserStack(configFromOptions(program))
+}
+
 function configFromOptions(program){
   if (!program.user) return {}
   var parts = program.user.split(':')
@@ -107,8 +116,11 @@ function configFromOptions(program){
   }
 }
 
-function createClient(){
-  return BrowserStack(configFromOptions(program))
+function killJob(jobId){
+  createClient().kill(jobId, exitIfErrorElse(function(info){
+    console.log('Killed job ' + jobId + ' which ran for ' + 
+      Math.round(info.time) + 's.')
+  }))
 }
 
 function calculateLaunchConfig(browser, url){
@@ -122,13 +134,4 @@ function calculateLaunchConfig(browser, url){
   }
 }
 
-function exitIfErrorElse(callback){
-  return function(err){
-    if (err){
-      console.error(err.message)
-      return process.exit(1)
-    }
-    var args = Array.prototype.slice.call(arguments, 1)
-    callback.apply(this, args)
-  }
-}
+
