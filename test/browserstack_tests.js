@@ -35,9 +35,6 @@ suite('browserstack', function(){
         createWorker: sinon.spy()
       }
       bs.client = fakeClient
-      bs.configure = function(cb){
-        cb()
-      }
       bs.launch({
         browser: 'firefox',
         version: '20.0',
