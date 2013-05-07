@@ -1,6 +1,7 @@
 var assert = require('chai').assert
 
 var browserstack = require('../lib/browserstack')
+var sinon = require('sinon')
 var credentials = require(__dirname + '/browserstack.credentials.json')
 var extend = require('../lib/extend')
 var path = require('path')
@@ -26,6 +27,25 @@ suite('browserstack', function(){
         assert.isNull(err)
         done()
       })
+    })
+
+    test('sets timeout', function(){
+      var bs = browserstack()
+      var fakeClient = {
+        createWorker: sinon.spy()
+      }
+      bs.client = fakeClient
+      bs.configure = function(cb){
+        cb()
+      }
+      bs.launch({
+        browser: 'firefox',
+        version: '20.0',
+        url: 'http://google.com',
+        timeout: 40
+      }, function(){})
+      var timeout = fakeClient.createWorker.args[0][0].timeout
+      assert.equal(timeout, 40)
     })
 
     test('kill a job', function(done){

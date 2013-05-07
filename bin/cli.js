@@ -27,6 +27,7 @@ program
   .description('Launch a browser')
   .action(function(browser, url){
     var config = calculateLaunchConfig(browser, url)
+    config.timeout = program.timeout
     createClient().launch(config, exitIfErrorElse(function(worker){
       console.log('Launched worker ' + worker.id + '.')
     }))
