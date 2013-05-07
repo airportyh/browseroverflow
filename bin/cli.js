@@ -37,7 +37,6 @@ program
   .command('browsers')
   .description('List available browsers')
   .action(function(){
-    console.log(configFromOptions(program))
     createClient().browsers(exitIfErrorElse(function(browsers){
       console.log(browsers)
     }))
