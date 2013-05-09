@@ -1,10 +1,10 @@
 TODO
 ====
 
-- support mobile browsers
-- browsers command allow filtering by string
-- move calculateLaunchConfig logic out of cli.js
-- smart browser matching (latest)
 - available browsers caching
+- move calculateLaunchConfig logic out of cli.js
+- browsers command allow filtering by string
+- smart browser matching (latest)
+- support mobile browsers
 - better error messages for tunneling
 - pretty up the display of available browsers and existing jobs
