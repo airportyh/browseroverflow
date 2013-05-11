@@ -1,8 +1,10 @@
 TODO
 ====
 
-- browser cache ttl of 1 day
+- write README
 - move over to browserstack-cli
+- publish to npm
+- browser cache ttl of 1 day
 - refactor display logic out of cli.js and add tests
 - allow filtering browsers by string
 - minimal browser display

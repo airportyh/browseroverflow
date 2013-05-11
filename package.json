@@ -13,11 +13,12 @@
     "progress": "~0.1.0",
     "unzip": "~0.1.7",
     "commander": "~1.1.1",
-    "browserstack": "~0.2.0",
+    "browserstack": "git://github.com/airportyh/node-browserstack#v3",
     "async": "~0.2.7",
     "did_it_work": "~0.0.3",
     "sinon": "~1.7.1",
-    "cli-table": "~0.2.0"
+    "cli-table": "~0.2.0",
+    "mkdirp": "~0.3.5"
   },
   "devDependencies": {
     "sinon": "~1.6.0",
@@ -27,9 +28,6 @@
     "test": "mocha -u tdd test/*.js",
     "slowtests": "mocha -u tdd test/slow/"
   },
-  "bundleDependencies": [
-    "browserstack"
-  ],
   "repository": "",
   "author": "Toby Ho",
   "license": "MIT",
