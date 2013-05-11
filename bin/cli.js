@@ -6,6 +6,7 @@ var extend = require('../lib/extend')
 var cli_util = require('../lib/cli_util')
 var exitIfErrorElse = cli_util.exitIfErrorElse
 var hangOnTillExit = cli_util.hangOnTillExit
+var selectBrowser = require('../lib/select_browser')
 
 program.version(require(__dirname + '/../package').version)
 
@@ -21,17 +22,34 @@ program
 program
   .command('setup')
   .description('Initial setup')
-  .action(function(){
-    createClient().setup(program)
-  })
+  .action(setup)
+
+function setup(){
+  makeBS().setup(program)
+}
 
 program
   .command('launch <browser> <url>')
   .description('Launch a browser')
-  .action(function(browser, url){
-    var config = calculateLaunchConfig(browser, url)
-    config.timeout = program.timeout
-    var client = createClient()
+  .action(launchBrowser)
+
+function launchBrowser(browserSpec, url){
+  var client = makeBS()
+  client.browsers(exitIfErrorElse(function(browsers){
+    var browser = selectBrowser(browsers, browserSpec)
+    if (!browser){
+      console.error('No matching browser found for "' + browserSpec + '"')
+      return process.exit(1)
+    }
+    var config = {
+      url: url,
+      browser: browser.browser,
+      device: browser.device,
+      os: browser.os,
+      os_version: browser.os_version,
+      browser_version: browser.browser_version
+      //timeout: program.timeout
+    }
     client.launch(config, exitIfErrorElse(function(job){
       console.log('Launched job ' + job.id + '.')
       if (program.attach){
@@ -41,57 +59,73 @@ program
         })
       }
     }))
-  })
+  }))
+}
 
 program
   .command('browsers')
   .description('List available browsers')
-  .action(function(){
-    createClient().browsers(exitIfErrorElse(function(browsers){
-      console.log(browsers)
-    }))
-  })
+  .action(listBrowsers)
+
+function listBrowsers(){
+  makeBS().browsers(exitIfErrorElse(function(browsers){
+    console.log(browsers)
+  }))
+}
 
 program
   .command('jobs')
   .description('List active jobs')
-  .action(function(){
-    createClient().jobs(exitIfErrorElse(function(jobs){
-      if (jobs.length === 0){
-        console.log('No active jobs.')
-      }else{
-        console.log(jobs)
-      }
-    }))
-  })
+  .action(listJobs)
+
+function listJobs(){
+  makeBS().jobs(exitIfErrorElse(function(jobs){
+    if (jobs.length === 0){
+      console.log('No active jobs.')
+    }else{
+      console.log(jobs)
+    }
+  }))
+}
 
 program
   .command('kill <job_id>')
   .description('Kill an active job')
   .action(killJob)
 
+function killJob(jobId){
+  makeBS().kill(jobId, exitIfErrorElse(function(info){
+    console.log('Killed job ' + jobId + ' which ran for ' + 
+      Math.round(info.time) + 's.')
+  }))
+}
+
 program
   .command('killall')
   .description('Kill all active jobs')
-  .action(function(){
-    createClient().killAllJobs(exitIfErrorElse(function(){
-      console.log('Killed all the jobs.')
-    }))
-  })
+  .action(killAllJobs)
+
+function killAllJobs(){
+  makeBS().killAllJobs(exitIfErrorElse(function(){
+    console.log('Killed all the jobs.')
+  }))
+}
 
 program
   .command('tunnel <host:port>')
   .description('Setup tunneling')
-  .action(function(hostAndPort){
-    createClient().tunnel({
-      hostAndPort: hostAndPort,
-      key: program.key,
-      usePrivateKey: program['private']
-    }, exitIfErrorElse(function(){
-      console.log('Tunnel is running.')
-      process.stdin.resume()
-    }))
-  })
+  .action(makeATunnel)
+
+function makeATunnel(hostAndPort){
+  makeBS().tunnel({
+    hostAndPort: hostAndPort,
+    key: program.key,
+    usePrivateKey: program['private']
+  }, exitIfErrorElse(function(){
+    console.log('Tunnel is running.')
+    process.stdin.resume()
+  }))
+}
 
 program.parse(process.argv)
 
@@ -99,39 +133,20 @@ if (program.args.length === 0){
   program.outputHelp()
 }
 
-function createClient(){
-  return BrowserStack(configFromOptions(program))
-}
+function makeBS(){
+  return BrowserStack(config())
 
-function configFromOptions(program){
-  if (!program.user) return {}
-  var parts = program.user.split(':')
-  if (parts.length !== 2){
-    console.error('--user option should be in format "user:password"')
-    process.exit(1)
-  }
-  return {
-    username: parts[0],
-    password: parts[1]
-  }
-}
-
-function killJob(jobId){
-  createClient().kill(jobId, exitIfErrorElse(function(info){
-    console.log('Killed job ' + jobId + ' which ran for ' + 
-      Math.round(info.time) + 's.')
-  }))
-}
-
-function calculateLaunchConfig(browser, url){
-  var parts = browser.split(':')
-  browser = parts[0]
-  var version = parts[1]
-  return {
-    browser: browser,
-    version: version,
-    url: url
+  function config(){
+    if (!program.user) return {}
+    var parts = program.user.split(':')
+    if (parts.length !== 2){
+      console.error('--user option should be in format "user:password"')
+      process.exit(1)
+    }
+    return {
+      username: parts[0],
+      password: parts[1]
+    }
   }
 }
-
 

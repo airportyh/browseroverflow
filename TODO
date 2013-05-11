@@ -1,10 +1,9 @@
 TODO
 ====
 
-
-- move calculateLaunchConfig logic out of cli.js
-- auto choose latest browser
-- support mobile browsers
-- broweser ttl
+- fix the tests
+- browser cache ttl
+- killall should show you each job killed.
 - browsers command allow filtering by string
 - pretty up the display of available browsers and existing jobs- better error messages for tunneling
+- status
