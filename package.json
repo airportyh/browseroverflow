@@ -26,6 +26,9 @@
     "test": "mocha -u tdd test/*.js",
     "slowtests": "mocha -u tdd test/slow/"
   },
+  "bundleDependencies": [
+    "browserstack"
+  ],
   "repository": "",
   "author": "Toby Ho",
   "license": "MIT",
