@@ -93,6 +93,13 @@ suite('browserstack', function(){
       })
     })
 
+    test('status', function(done){
+      bs.status(function(err, status){
+        assert(status != null)
+        done()
+      })
+    })
+
     teardown(function(done){
       bs.killAllJobs(function(){ done() })
     })

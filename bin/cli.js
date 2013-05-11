@@ -127,6 +127,17 @@ function makeATunnel(hostAndPort){
   }))
 }
 
+program
+  .command('status')
+  .description('Get the current status')
+  .action(getStatus)
+
+function getStatus(){
+  makeBS().status(exitIfErrorElse(function(status){
+    console.log(status)
+  }))
+}
+
 program.parse(process.argv)
 
 if (program.args.length === 0){
