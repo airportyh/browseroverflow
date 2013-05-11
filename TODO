@@ -1,8 +1,7 @@
 TODO
 ====
 
-- pretty up the display of available browsers and - - browsers command allow filtering by string
+- allow filtering by string
 - killall should show you each job killed.
 - browser cache ttl
-- pretty status
 - existing jobs- better error messages for tunneling

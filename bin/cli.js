@@ -135,7 +135,9 @@ program
 
 function getStatus(){
   makeBS().status(exitIfErrorElse(function(status){
-    console.log(status)
+    for (var prop in status){
+      console.log(capitalize(prop.replace(/_/g, ' ')) + ': ' + status[prop])
+    }
   }))
 }
 
@@ -163,7 +165,6 @@ function makeBS(){
 }
 
 function displayBrowsers(browsers){
-
   var table = new Table({
     head: ['Browser', 'Device', 'OS'],
     colWidth: [100, 100, 100]
@@ -208,5 +209,9 @@ function osDisplay(browser){
 
 function deviceDisplay(browser){
   return browser.device || 'NA'
+}
+
+function capitalize(str){
+  return str.substring(0, 1).toUpperCase() + str.substring(1)
 }
 
