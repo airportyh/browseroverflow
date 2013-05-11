@@ -20,7 +20,9 @@ suite('browserstack', function(){
     test('launch', function(done){
       bs.launch({
         browser: 'firefox', 
-        version: '14.0', 
+        browser_version: '14.0', 
+        os: 'OS X',
+        os_version: 'Mountain Lion',
         url: 'http://google.com'
       }, function(err, worker){
         assert.typeOf(worker.id, 'number')
@@ -48,7 +50,9 @@ suite('browserstack', function(){
     test('kill a job', function(done){
       bs.launch({
         browser: 'firefox', 
-        version: '14.0', 
+        browser_version: '14.0', 
+        os: 'OS X',
+        os_version: 'Mountain Lion',
         url: 'http://google.com'
       }, function(err, worker){
         bs.kill(worker.id, function(err){
@@ -67,7 +71,7 @@ suite('browserstack', function(){
     test('list browsers', function(done){
       bs.browsers(function(err, browsers){
         var browser = browsers[0]
-        assert('version' in browser)
+        assert('browser_version' in browser)
         assert('os' in browser)
         done()
       })
