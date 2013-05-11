@@ -1,7 +1,10 @@
 TODO
 ====
 
-- allow filtering by string
+- browser cache ttl of 1 day
+- move over to browserstack-cli
+- refactor display logic out of cli.js and add tests
+- allow filtering browsers by string
+- minimal browser display
 - killall should show you each job killed.
-- browser cache ttl
-- existing jobs- better error messages for tunneling
+- better error messages for tunneling
