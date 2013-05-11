@@ -4,7 +4,7 @@
   "description": "Browser launcher in the cloud.",
   "main": "index.js",
   "bin": {
-    "browsem": "download.js"
+    "browserstack": "bin/cli.js"
   },
   "directories": {
     "test": "test"
