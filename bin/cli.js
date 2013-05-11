@@ -7,6 +7,7 @@ var cli_util = require('../lib/cli_util')
 var exitIfErrorElse = cli_util.exitIfErrorElse
 var hangOnTillExit = cli_util.hangOnTillExit
 var selectBrowser = require('../lib/select_browser')
+var Table = require('cli-table')
 
 program.version(require(__dirname + '/../package').version)
 
@@ -69,7 +70,7 @@ program
 
 function listBrowsers(){
   makeBS().browsers(exitIfErrorElse(function(browsers){
-    console.log(browsers)
+    displayBrowsers(browsers)
   }))
 }
 
@@ -83,7 +84,7 @@ function listJobs(){
     if (jobs.length === 0){
       console.log('No active jobs.')
     }else{
-      console.log(jobs)
+      displayJobs(jobs)
     }
   }))
 }
@@ -160,4 +161,31 @@ function makeBS(){
     }
   }
 }
+
+function displayBrowsers(browsers){
+  var table = new Table({
+    head: ['Browser', 'OS'],
+    colWidth: [100, 100]
+  })
+  browsers.forEach(function(browser){
+    table.push([
+      browserDisplay(browser),
+      osDisplay(browser)
+    ])
+  })
+  console.log(table.toString())
+
+  function browserDisplay(browser){
+    var ret = browser.browser
+    if (browser.browser_versio){
+      ret += ' (' + browser.browser_version + ')'
+    }
+    return ret
+  }
+
+  function osDisplay(browser){
+    return browser.os + ' (' + browser.os_version + ')'
+  }
+}
+
 
