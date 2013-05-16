@@ -25,7 +25,9 @@ Require it and create an instance
 Get the list of available browsers on BrowserStack.
 
     bs.browsers(function(err, browsers){
-      console.log('These are all the browsers', browsers);
+      if (!err){
+        console.log('These are all the browsers', browsers);
+      }
     });
 
 Launch a browser
@@ -37,31 +39,41 @@ Launch a browser
       os_version: 'Mountain Lion',
       url: 'http://test.com'
     }, function(err, job){
-      console.log('Created job ' + job.id);
+      if (!err){
+        console.log('Created job ' + job.id);
+      }
     });
 
 List all launched browsers
 
     bs.jobs(function(err, jobs){
-      console.log('These are all the active jobs', jobs);
+      if (!err){
+        console.log('These are all the active jobs', jobs);
+      }
     });
 
 Kill a launched browser
 
     bs.kill(aJobId, function(err, info){
-      console.log('Kill job ' + aJobId + ' which ran for ' + info.time);
+      if (!err){
+        console.log('Kill job ' + aJobId + ' which ran for ' + info.time);
+      }
     });
 
 Kill all launched browsers
 
     bs.killAll(function(err){
-      console.log('Kill all the jobs');
+      if (!err){
+        console.log('Killed all the jobs');
+      }
     });
 
 Get the current API status
 
     bs.status(function(err, status){
-      console.log('The status is: ', status);
+      if (!err){
+        console.log('The status is: ', status);
+      }
     });
 
 Setup a tunnel
@@ -69,8 +81,6 @@ Setup a tunnel
     bs.tunnel('localhost:7357', function(err){
       if (!err){
         console.log('Tunnel is running!');
-      }else{
-        console.error(err);
       }
     });
 
