@@ -1,12 +1,11 @@
 #! /usr/bin/env node
 
 var program = require('commander')
-var BrowserStack = require('../lib/browserstack')
-var extend = require('../lib/extend')
+var BrowserStack = require('../index')
 var cli_util = require('../lib/cli_util')
 var exitIfErrorElse = cli_util.exitIfErrorElse
 var hangOnTillExit = cli_util.hangOnTillExit
-var selectBrowser = require('../lib/select_browser')
+var selectBrowser = BrowserStack.selectBrowser
 var Table = require('cli-table')
 
 program.version(require(__dirname + '/../package').version)
@@ -51,6 +50,7 @@ function launchBrowser(browserSpec, url){
       browser_version: browser.browser_version
       //timeout: program.timeout
     }
+
     client.launch(config, exitIfErrorElse(function(job){
       console.log('Launched job ' + job.id + '.')
       if (program.attach){
