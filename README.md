@@ -12,7 +12,7 @@ This library has a companion command line utility: [browserstack-cli](https://gi
 
     browserstack setup
 
-which will walk you through setting up your credentials and api keys for BrowserStack. Once this is done, browseroverflow is ready to use.
+which will walk you through setting up your credentials and api keys for BrowserStack and download the jar required for tunneling. Once this is done, browseroverflow is ready to use.
 
 API Walkthrough
 ---------------
