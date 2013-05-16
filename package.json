@@ -1,11 +1,8 @@
 {
-  "name": "browsem",
-  "version": "0.0.2",
-  "description": "Browser launcher in the cloud.",
+  "name": "browseroverflow",
+  "version": "0.0.1",
+  "description": "An all-in-one library for launching BrowserStack browsers.",
   "main": "index.js",
-  "bin": {
-    "browserstack": "bin/cli.js"
-  },
   "directories": {
     "test": "test"
   },
