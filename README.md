@@ -64,6 +64,16 @@ Get the current API status
       console.log('The status is: ', status);
     });
 
+Setup a tunnel
+
+    bs.tunnel('localhost:7357', function(err){
+      if (!err){
+        console.log('Tunnel is running!');
+      }else{
+        console.error(err);
+      }
+    });
+
 Contributors
 ------------
 
