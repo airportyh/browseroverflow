@@ -1,10 +1,8 @@
 TODO
 ====
 
-- write README
-- should I move this project to a different name like browseroverflow?
-- move over to browserstack-cli
-- publish to npm
+- write README for this and for browserstack-cli.
+
 - browser cache ttl of 1 day
 - refactor display logic out of cli.js and add tests
 - allow filtering browsers by string
