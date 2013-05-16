@@ -19,8 +19,8 @@ API Walkthrough
 
 Require it and create an instance
 
-    var BrowserStack = require('browseroverflow')
-    var bs = BrowserStack()
+    var BrowserStack = require('browseroverflow');
+    var bs = BrowserStack();
 
 Get the list of available browsers on BrowserStack.
 
