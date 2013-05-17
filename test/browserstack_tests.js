@@ -31,6 +31,17 @@ suite('browserstack', function(){
       })
     })
 
+    test('launch with underspecified settings', function(done){
+      bs.launch({
+        browser: 'firefox', 
+        url: 'http://google.com'
+      }, function(err, worker){
+        assert.typeOf(worker.id, 'number')
+        assert.isNull(err)
+        done()
+      })
+    })
+
     test('sets timeout', function(){
       var bs = browserstack()
       var fakeClient = {
@@ -39,7 +50,9 @@ suite('browserstack', function(){
       bs.client = fakeClient
       bs.launch({
         browser: 'firefox',
-        version: '20.0',
+        browser_version: '14.0', 
+        os: 'OS X',
+        os_version: 'Mountain Lion',
         url: 'http://google.com',
         timeout: 40
       }, function(){})

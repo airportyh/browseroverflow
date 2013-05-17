@@ -14,6 +14,17 @@ suite('BrowserSelector', function(){
       {browser_version: '24.0', browser: 'firefox'}) 
   })
 
+  test('can also take spec as an object', function(){
+    var browsers = [
+      {browser_version: '27.0', browser: 'firefox'},
+      {browser_version: '24.0', browser: 'firefox'},
+      {browser_version: '8.0', browser: 'ie'}
+    ]
+    var spec = 'firefox:24.0'
+    assert.deepEqual(selectBrowser(browsers, {name: 'firefox', version: '24.0'}), 
+      {browser_version: '24.0', browser: 'firefox'}) 
+  })
+
   test('dont even have to write decimal', function(){
     var browsers = [
       {browser_version: '24.0', browser: 'firefox'},

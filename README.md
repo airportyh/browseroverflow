@@ -44,6 +44,17 @@ Launch a browser
       }
     });
 
+If you don't care about the OS and all that, you can omit most of them. The only settings that are required are `browser`, and `url`
+
+    bs.launch({
+      browser: 'firefox', 
+      url: 'http://test.com'
+    }, function(err, job){
+      if (!err){
+        console.log('Created job ' + job.id);
+      }
+    });
+
 List all launched browsers
 
     bs.jobs(function(err, jobs){
