@@ -176,7 +176,7 @@ suite('browserstack', function(){
         assert.isNull(err)
         assert.equal(proc.exe, 'java')
         assert.deepEqual(proc.args, 
-          ['-jar', path.join(profileDir, 'browserstack.jar'),
+          ['-jar', path.join(profileDir, 'BrowserStackTunnel.jar'),
           '53cEoaN1o339oA', 'localhost,7357,0'])
         assert.deepEqual(proc.opts.goodIfMatches[0], /You can now access your local server/)
         assert.deepEqual(proc.opts.badIfMatches[0], /^\*\*Error: (.*)$/)
