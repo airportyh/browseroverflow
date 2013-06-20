@@ -1,6 +1,6 @@
 {
   "name": "browseroverflow",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "An all-in-one library for launching BrowserStack browsers.",
   "main": "index.js",
   "directories": {
