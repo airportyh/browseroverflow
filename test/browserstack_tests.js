@@ -6,8 +6,14 @@ var credentials = require(__dirname + '/browserstack.credentials.json')
 var extend = require('../lib/extend')
 var path = require('path')
 var profileDir = path.join(__dirname, 'profile')
+var BodyDouble = require('bodydouble')
+var Process = require('did_it_work')
 
 suite('browserstack', function(){
+
+  teardown(function(){
+    BodyDouble.restoreStubs()
+  })
 
   suite('client apis', function(){
 
@@ -149,102 +155,88 @@ suite('browserstack', function(){
   suite('tunneling', function(){
 
     var proc
-    function FakeProc(exe, args){
-      proc = {}
-      proc.exe = exe
-      proc.args = args
-      proc.opts = {}
-      var methods = 'good bad complete goodIfMatches badIfMatches'.split(' ')
-      methods.forEach(function(method){
-        proc[method] = function(){
-          proc.opts[method] = arguments
-          return proc
-        }
-      })
-      return proc
-    }
+    var bs
 
-    test('tunnel success', function(done){
-
-      var bs = browserstack({
+    beforeEach(function(){
+      bs = browserstack({
         profileDir: profileDir
       })
 
-      bs.Process = FakeProc
+      proc = BodyDouble(Process(''), {fluent: true})
 
+      BodyDouble.stub(bs, 'Process').returns(proc)
+    })
+
+    test('tunnel success', function(done){
       bs.tunnel('localhost:7357', function(err){
         assert.isNull(err)
-        assert.equal(proc.exe, 'java')
-        assert.deepEqual(proc.args, 
+        assert.equal(bs.Process.lastCall.args[0], 'java')
+        assert.deepEqual(bs.Process.lastCall.args[1], 
           ['-jar', path.join(profileDir, 'BrowserStackTunnel.jar'),
           '53cEoaN1o339oA', 'localhost,7357,0'])
-        assert.deepEqual(proc.opts.goodIfMatches[0], /You can now access your local server/)
-        assert.deepEqual(proc.opts.badIfMatches[0], /^\*\*Error: (.*)$/)
+        assert.deepEqual(proc.goodIfMatches.lastCall.args[0], /You can now access your local server/)
+        assert.deepEqual(proc.badIfMatches.lastCall.args[0], /^\*\*Error: (.*)$/)
         done()
       })
 
       setTimeout(function(){
-        proc.opts.good[0]()
+        proc.good.lastCall.args[0]()
       }, 20) // long enough for it to ready the config file
     })
 
     test('tunnel fatal error', function(done){
-
-      var bs = browserstack({
-        profileDir: profileDir
-      })
-
-      bs.Process = FakeProc
-
       bs.tunnel('localhost:7357', function(err){
         assert.equal(err, 'jar not found')
         done()
       })
 
       setTimeout(function(){
-        proc.opts.bad[0]('jar not found')
+        proc.bad.lastCall.args[0]('jar not found')
       }, 20)
     })
 
     test('tunnel can optionally specify key', function(done){
-      var bs = browserstack({
-        profileDir: profileDir
-      })
-
-      bs.Process = FakeProc
-
       bs.tunnel({
         hostAndPort: 'localhost:7357', 
         key: 'mykey'
       }, function(err){
-        assert.equal(proc.args[2], 'mykey')
+        assert.equal(bs.Process.lastCall.args[1][2], 'mykey')
         done()
       })
 
       setTimeout(function(){
-        proc.opts.good[0]()
+        proc.good.lastCall.args[0]()
       }, 20)
     })
 
     test('uses private key if specifiy private', function(done){
-            var bs = browserstack({
-        profileDir: profileDir
-      })
-
-      bs.Process = FakeProc
-
       bs.tunnel({
         hostAndPort: 'localhost:7357', 
         usePrivateKey: true
       }, function(err){
-        assert.equal(proc.args[2], '38etonOu04Abet')
+        assert.equal(bs.Process.lastCall.args[1][2], '38etonOu04Abet')
         done()
       })
 
       setTimeout(function(){
-        proc.opts.good[0]()
+        proc.good.lastCall.args[0]()
       }, 20)
 
+    })
+
+    test('can stop tunnel', function(done){
+      var tunnel = bs.tunnel({
+        hostAndPort: 'localhost:7357', 
+        usePrivateKey: true
+      }, function(err){
+        tunnel.stop()
+        assert(proc.kill.called, 'should have killed')
+        done()
+      })
+
+      setTimeout(function(){
+        proc.good.lastCall.args[0]()
+      }, 20)
     })
 
   })

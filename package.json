@@ -17,10 +17,11 @@
   },
   "devDependencies": {
     "sinon": "~1.6.0",
-    "chai": "~1.5.0"
+    "chai": "~1.5.0",
+    "bodydouble": "0.0.2"
   },
   "scripts": {
-    "test": "mocha -u tdd test/*.js",
+    "test": "mocha -u tdd test/*.js -t 3000",
     "slowtests": "mocha -u tdd test/slow/"
   },
   "repository": "",
