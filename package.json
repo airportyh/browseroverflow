@@ -21,7 +21,7 @@
     "bodydouble": "0.0.2"
   },
   "scripts": {
-    "test": "mocha -u tdd test/*.js -t 3000",
+    "test": "mocha -u tdd test/*.js -t 6000",
     "slowtests": "mocha -u tdd test/slow/"
   },
   "repository": "",
