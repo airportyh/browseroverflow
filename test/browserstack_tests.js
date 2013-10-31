@@ -135,11 +135,10 @@ suite('browserstack', function(){
       bs.configure(function(config){
         var expected = extend(require(path.join(profileDir, 'browserstack.json')), orgConfig)
         assert.equal(config.username, 'johnsmith')
-        assert.equal(config.privateKey, '38etonOu04Abet')
         assert.equal(config.apiKey, '53cEoaN1o339oA')
+        assert.equal(config.password, '53cEoaN1o339oA')
         assert.equal(config.profileDir, profileDir)
         assert.equal(bs.config, config)
-        assert.equal(bs.config.password, 's\u000bq%kw!\u0006')
         done()
       })
     })

@@ -47,7 +47,7 @@ suite('download', function(){
   })
 
   setup(function(done){
-    exec('rm downloads/*', function(){ done() })
+    exec('rm -f downloads/* && mkdir -p downloads/', function(){ done() })
   })
 
 })
