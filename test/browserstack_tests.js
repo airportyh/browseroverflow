@@ -25,8 +25,8 @@ suite('browserstack', function(){
 
     test('launch', function(done){
       bs.launch({
-        browser: 'firefox', 
-        browser_version: '14.0', 
+        browser: 'firefox',
+        browser_version: '14.0',
         os: 'OS X',
         os_version: 'Mountain Lion',
         url: 'http://google.com'
@@ -39,7 +39,7 @@ suite('browserstack', function(){
 
     test('launch with underspecified settings', function(done){
       bs.launch({
-        browser: 'firefox', 
+        browser: 'firefox',
         url: 'http://google.com'
       }, function(err, worker){
         assert.typeOf(worker.id, 'number')
@@ -56,7 +56,7 @@ suite('browserstack', function(){
       bs.client = fakeClient
       bs.launch({
         browser: 'firefox',
-        browser_version: '14.0', 
+        browser_version: '14.0',
         os: 'OS X',
         os_version: 'Mountain Lion',
         url: 'http://google.com',
@@ -68,8 +68,8 @@ suite('browserstack', function(){
 
     test('kill a job', function(done){
       bs.launch({
-        browser: 'firefox', 
-        browser_version: '14.0', 
+        browser: 'firefox',
+        browser_version: '14.0',
         os: 'OS X',
         os_version: 'Mountain Lion',
         url: 'http://google.com'
@@ -148,97 +148,40 @@ suite('browserstack', function(){
       var homeDir = process.env.HOME || process.env.USERPROFILE
       assert.equal(bs.config.profileDir, path.join(homeDir, '.browserstack'))
     })
-    
+
   })
 
   suite('tunneling', function(){
 
-    var proc
     var bs
 
     beforeEach(function(){
       bs = browserstack({
         profileDir: profileDir
       })
-
-      proc = BodyDouble(Process(''), {fluent: true})
-
-      BodyDouble.stub(bs, 'Process').returns(proc)
     })
 
     test('tunnel success', function(done){
-      bs.tunnel('localhost:7357', function(err){
+      var tunnel = bs.tunnel('localhost:7357', function(err){
         assert.isNull(err)
-        assert.equal(bs.Process.lastCall.args[0], 'java')
-        assert.deepEqual(bs.Process.lastCall.args[1], 
-          ['-jar', path.join(profileDir, 'BrowserStackTunnel.jar'),
-          '53cEoaN1o339oA', 'localhost,7357,0'])
-        assert.deepEqual(proc.goodIfMatches.lastCall.args[0], /You can now access your local server/)
-        assert.deepEqual(proc.badIfMatches.lastCall.args[0], /^\*\*Error: (.*)$/)
-        done()
-      })
 
-      setTimeout(function(){
-        proc.good.lastCall.args[0]()
-      }, 20) // long enough for it to ready the config file
+        tunnel.stop(function(err) {
+          assert.isUndefined(err)
+          done()
+        })
+      })
     })
 
-    test('tunnel fatal error', function(done){
+    test('tunnel start timeout', function(done){
+      // using an absurd timeout value
+      var startTimeout = 10
+      bs.config.timeout = startTimeout
+
       bs.tunnel('localhost:7357', function(err){
-        assert.equal(err, 'jar not found')
+        assert.instanceOf(err, Error, 'Failed to start tunnel in ' + startTimeout + 'ms')
         done()
       })
-
-      setTimeout(function(){
-        proc.bad.lastCall.args[0]('jar not found')
-      }, 20)
     })
-
-    test('tunnel can optionally specify key', function(done){
-      bs.tunnel({
-        hostAndPort: 'localhost:7357', 
-        key: 'mykey'
-      }, function(err){
-        assert.equal(bs.Process.lastCall.args[1][2], 'mykey')
-        done()
-      })
-
-      setTimeout(function(){
-        proc.good.lastCall.args[0]()
-      }, 20)
-    })
-
-    test('uses private key if specifiy private', function(done){
-      bs.tunnel({
-        hostAndPort: 'localhost:7357', 
-        usePrivateKey: true
-      }, function(err){
-        assert.equal(bs.Process.lastCall.args[1][2], '38etonOu04Abet')
-        done()
-      })
-
-      setTimeout(function(){
-        proc.good.lastCall.args[0]()
-      }, 20)
-
-    })
-
-    test('can stop tunnel', function(done){
-      var tunnel = bs.tunnel({
-        hostAndPort: 'localhost:7357', 
-        usePrivateKey: true
-      }, function(err){
-        tunnel.stop()
-        assert(proc.kill.called, 'should have killed')
-        done()
-      })
-
-      setTimeout(function(){
-        proc.good.lastCall.args[0]()
-      }, 20)
-    })
-
   })
 
 })
-

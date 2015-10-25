@@ -10,6 +10,7 @@
     "progress": "~0.1.0",
     "commander": "~1.1.1",
     "browserstack": "git://github.com/airportyh/node-browserstack#v3",
+    "browserstacktunnel-wrapper": "^1.4.2",
     "async": "~0.2.7",
     "did_it_work": "~0.0.3",
     "sinon": "~1.7.1",
