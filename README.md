@@ -1,3 +1,5 @@
+*This library is not being actively maintained. We recommend you taking a look at the [browserstack module](https://www.npmjs.com/package/browserstack) on npm as an alternative.*
+
 BrowserOverflow
 ===============
 
